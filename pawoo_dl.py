@@ -19,7 +19,7 @@ if __name__ == "__main__":
                 
                 download = line.split('"')[1]
                 filename = download.split('/')[9]
-                urllib.request.urlretrieve(download, os.path.join(artistname, filename))
+                urllib.request.urlretrieve(download, os.path.join(downloadfolder, artistname, filename))
                 print("Downloaded " + filename)
             elif "Show more" in line:
                 pagenum += 1
