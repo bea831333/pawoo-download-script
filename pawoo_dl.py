@@ -13,8 +13,9 @@ if __name__ == "__main__":
         lines = page.split('\n')
         for line in lines:
             if line.startswith("<a href=\"https://img.pawoo.net/media_attachments/files"):
-                if not os.path.exists(downloadfolder + artistname):
+                if not os.path.exists(downloadfolder):
                     os.makedirs(downloadfolder)
+                if not os.path.exists(downloadfolder + artistname):
                     os.makedirs(downloadfolder + artistname)
                 
                 download = line.split('"')[1]
