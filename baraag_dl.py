@@ -7,30 +7,26 @@ def increment_file_name(filename, multiple):
 if __name__ == "__main__":
     artistname = sys.argv[1]
     downloadfolder = "downloads"
-    urlbase = "https://pawoo.net/@" + artistname + "/media"
-    pagecomponent = ""
+    urlbase = "https://baraag.net/@" + artistname + "/media?page="
+    pagenum = 1
     flag = True
-    end = False
-    while flag and not end:
+    while flag:
         flag = False
-        if pagecomponent != "":
-            url = urlbase + "?" + pagecomponent
-        else:
-            url = urlbase
+        url = urlbase + str(pagenum)
+        print(url)
         page = urllib.request.urlopen(url).read().decode("utf-8")
         lines = page.split('\n')
         for line in lines:
-            if line.startswith("<a href=\"https://img.pawoo.net/media_attachments/files"):
+            if line.startswith("<a href=\"/system/media_attachments"):
                 if not os.path.exists(downloadfolder):
                     os.makedirs(downloadfolder)
                 if not os.path.exists(os.path.join(downloadfolder, artistname)):
                     os.makedirs(os.path.join(downloadfolder, artistname))
                 
-                download = line.split('"')[1]
-                filename = download.split('/')[9]
+                download = "https://baraag.net" + line.split('"')[1]
+                filename = download.split('/')[11]
                 
                 if os.path.exists(os.path.join(downloadfolder, artistname, filename)):
-                    end = True
                     multiple = 1
                     newfilename = increment_file_name(filename, multiple)
                     while os.path.exists(os.path.join(downloadfolder, artistname, newfilename)):
@@ -41,6 +37,6 @@ if __name__ == "__main__":
                 else:
                     urllib.request.urlretrieve(download, os.path.join(downloadfolder, artistname, filename))
                     print("Downloaded '" + filename + "'")
-            elif "Show more" in line:
-                pagecomponent = line.split('?')[1].split('"')[0]
+            elif "Show older" in line:
+                pagenum += 1
                 flag = True
